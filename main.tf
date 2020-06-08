@@ -4,20 +4,20 @@ variable wordpress_port {
   default = "8080"
 }
 
-resource "docker_volume" "mysql_volume" {}
+resource "docker_volume" "wordpress_database" {}
 
-resource "docker_network" "local_network" {
-  name = "local_network"
+resource "docker_network" "wp_net" {
+  name = "wp_net"
   ipam_config {
     subnet = "172.16.0.1/16"
   }
 }
 
-resource "docker_container" "database" {
-  name  = "database"
+resource "docker_container" "db" {
+  name  = "db"
   image = "mysql:5.7"
   restart = "always"
-  network_mode = "local_network"
+  network_mode = "wp_net"
   env = [
      "MYSQL_ROOT_PASSWORD=wordpress",
      "MYSQL_PASSWORD=wordpress",
@@ -27,7 +27,7 @@ resource "docker_container" "database" {
   mounts {
     type = "volume"
     target = "/var/lib/mysql"
-    source = "mysql_volume"
+    source = "wordpress_database"
   }
 }
 
@@ -35,7 +35,7 @@ resource "docker_container" "wordpress" {
   name  = "wordpress"
   image = "wordpress:latest"
   restart = "always"
-  network_mode = "local_network"
+  network_mode = "wp_net"
   env = [
     "WORDPRESS_DB_HOST=db:3306",
     "WORDPRESS_DB_PASSWORD=wordpress"
