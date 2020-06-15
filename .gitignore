@@ -7,3 +7,5 @@
 
 # ignore crash log files
 crash.log
+
+# ignore ip_list.txt

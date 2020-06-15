@@ -29,6 +29,9 @@ resource "docker_container" "db" {
     target = "/var/lib/mysql"
     source = "wordpress_database"
   }
+  provisioner "local-exec" {
+    command = "echo ${docker_container.db.ip_address} ${docker_container.db.name}>> ip_list.txt"
+  }
 }
 
 resource "docker_container" "wordpress" {
@@ -43,5 +46,9 @@ resource "docker_container" "wordpress" {
   ports {
     internal = "80"
     external = var.wordpress_port
+  }
+
+  provisioner "local-exec" {
+    command = "echo ${docker_container.wordpress.ip_address} ${docker_container.wordpress.name}>> ip_list.txt"
   }
 }
