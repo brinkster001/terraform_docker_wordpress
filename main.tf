@@ -48,6 +48,7 @@ resource "docker_container" "wordpress" {
     external = var.wordpress_port
   }
 
+  
   provisioner "local-exec" {
     command = "echo ${docker_container.wordpress.ip_address} ${docker_container.wordpress.name}>> ip_list.txt"
   }
