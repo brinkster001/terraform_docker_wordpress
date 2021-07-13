@@ -1,4 +1,4 @@
-# ignore .tfstate files
+# ignore .tfstate
 *.tfstate
 *.tfstate.*
 
